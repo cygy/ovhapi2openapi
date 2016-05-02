@@ -15,6 +15,7 @@ documentation:
 api:
   path: https://eu.api.ovh.com/1.0
   routes:
+  - /auth
   - /vps
   - /sms
   consumes:
