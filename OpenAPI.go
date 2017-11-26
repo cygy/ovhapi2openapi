@@ -452,6 +452,13 @@ func OpenAPIFromAPIInformations(infos *APIInfos) *OpenAPI {
 
 		oapi.Parameters[getOpenAPINameFromOVHAPI(OVHNamespace, OVHSignature)] = signatureParameter
 	}
+	oapi.SecurityDefinitions = map[string]OpenAPISecurityScheme{
+		"ApiKeyAuth": {
+			Name: "X-Ovh-Consumer",
+			Type: "apiKey",
+			In:   "header",
+		},
+	}
 
 	return oapi
 }
@@ -571,6 +578,13 @@ func AddOVHAPIDefinitionToOpenAPI(definition *OVHAPIDefinition, oapi *OpenAPI, k
 				signatureParameterRef := OpenAPIRef{}
 				signatureParameterRef.Ref = getOpenAPIRefFromOVHAPI(OVHNamespace, OVHSignature, OpenAPIRefTypeParameters)
 				operation.Parameters = append(operation.Parameters, signatureParameterRef)
+			}
+			if isAuthenticationRequired {
+				operation.Security = OpenAPISecurity{
+					map[string][]string{
+						"ApiKeyAuth": {},
+					},
+				}
 			}
 
 			// Parse the parameters
