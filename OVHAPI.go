@@ -236,8 +236,8 @@ func newOVHAPITypeObjectProperties(parameter map[string]interface{}) OVHAPITypeO
 	properties.FullType = stringFromStringOrNil(parameter["fullType"])
 	properties.Type = stringFromStringOrNil(parameter["type"])
 	properties.Description = stringFromStringOrNil(parameter["description"])
-	properties.ReadOnly = stringFromIntOrNil(parameter["readOnly"])
-	properties.CanBeNull = stringFromIntOrNil(parameter["canBeNull"])
+	properties.ReadOnly = stringFromBoolOrNil(parameter["readOnly"])
+	properties.CanBeNull = stringFromBoolOrNil(parameter["canBeNull"])
 
 	return properties
 }
@@ -249,6 +249,19 @@ func stringFromStringOrNil(value interface{}) string {
 	}
 
 	return value.(string)
+}
+
+func stringFromBoolOrNil(value interface{}) string {
+       var valfloat float64
+        if value == nil {
+                return ""
+        } else if value == true {
+                valfloat = 1
+        } else {
+                valfloat = 0
+        }
+
+        return fmt.Sprintf("%.0f", valfloat)
 }
 
 func stringFromIntOrNil(value interface{}) string {
